@@ -1,4 +1,8 @@
-﻿namespace CleanArchitecture.Web
+﻿using Microsoft.AspNetCore.Builder;
+using Microsoft.OpenApi.Models;
+using Swashbuckle.AspNetCore.Swagger;
+
+namespace CleanArchitecture.Web
 {
     public class Startup
     {
@@ -12,6 +16,8 @@
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddRazorPages();
+
+
         }
 
         public void Configure(WebApplication app, IWebHostEnvironment env)
@@ -22,6 +28,7 @@
                 // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }
+
             app.UseHttpsRedirection();
             app.UseStaticFiles();
             app.UseRouting();
