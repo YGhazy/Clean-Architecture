@@ -1,4 +1,6 @@
 ﻿using AutoMapper;
+using CleanArchitecture.Application.Commands.Reservations;
+using CleanArchitecture.Application.Commands;
 using CleanArchitecture.Application.Common;
 using CleanArchitecture.Application.Services;
 using CleanArchitecture.Application.Services.IServices;
@@ -41,7 +43,6 @@ namespace CleanArchitecture.Setup
             services.AddScoped<IUnitOfWork, UnitOfWork>();
             #endregion
 
-
             #region Mapper
 
             var mapperConfig = new MapperConfiguration(mc =>
@@ -53,27 +54,39 @@ namespace CleanArchitecture.Setup
 
             #endregion
 
-            #region Identity
-            //services.AddScoped<ApplicationUserManager>();
-            #endregion
-
             #region payment
             services.AddScoped<IPaymentFactory, PaymentFactory>();
             //to resolve it in runtime
-            services.AddScoped<CreditCardPayment>()
-            .AddScoped<IPayment, CreditCardPayment>(s => s.GetService<CreditCardPayment>());
-            services.AddScoped<PayPalPayment>()
-            .AddScoped<IPayment, PayPalPayment>(s => s.GetService<PayPalPayment>());
-            services.AddScoped<BitcoinPayment>()
-            .AddScoped<IPayment, BitcoinPayment>(s => s.GetService<BitcoinPayment>());
+            //services.AddScoped<CreditCardPayment>()
+            //.AddScoped<IPayment, CreditCardPayment>(s => s.GetService<CreditCardPayment>());
+            //services.AddScoped<PayPalPayment>()
+            //.AddScoped<IPayment, PayPalPayment>(s => s.GetService<PayPalPayment>());
+            //services.AddScoped<BitcoinPayment>()
+            //.AddScoped<IPayment, BitcoinPayment>(s => s.GetService<BitcoinPayment>());
 
             #endregion
+           
             #region reservation
             services.AddScoped< ReservationService>();
-            services.AddScoped<IReservationService>(provider => new ReservationProxyService(provider.GetService<ReservationService>())); //, provider.GetService<ILogger<ReservationProxyService>>()
+            //services.AddScoped<IReservationService>(provider => new ReservationProxyService(provider.GetService<ReservationService>()));
+            services.AddScoped<IReservationService>(provider =>
+    new ReservationProxyService(provider.GetService<ReservationService>(),
+                                 provider.GetService<IScreenShowRepository>(),
+                                 provider.GetService<IReservationRepository>()));
+
+            services.AddScoped<ICustomObservable<Reservation>, ReservationObservable>();
+            services.AddScoped<ICustomObserver<Reservation>, ReservationObserver>();
+            //, provider.GetService<ILogger<ReservationProxyService>>()
+
+            //services.AddTransient<IReservationService, ReservationProxyService>(serviceProvider =>
+            //{
+            //    var realService = serviceProvider.GetRequiredService<ReservationService>();
+            //    return new ReservationProxyService( realService);
+            //});
+
+            // services.AddScoped<ICommand, CreateReservationCommand>();
 
             #endregion
-
 
         }
     }

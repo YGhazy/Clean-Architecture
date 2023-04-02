@@ -12,7 +12,7 @@ namespace CleanArchitecture.Application.Common
 {
     public sealed class FileLogging : ILogging // prevent inheritance
     {
-        // Lazy<T>
+        // Lazy<T> This delays the cost of creating it till if/when it's needed instead of always incurring the cost.
         private static readonly Lazy<FileLogging> _lazyLogger
             = new Lazy<FileLogging>(() => new FileLogging());
 
@@ -48,6 +48,22 @@ namespace CleanArchitecture.Application.Common
                 writer.Write(sb.ToString());
                 writer.Flush();
             }        }
+        public void LogInformation(string message)
+        {
+            string folderPath = string.Format(AppDomain.CurrentDomain.BaseDirectory + "Logs");
+            DirectoryInfo di = Directory.CreateDirectory(folderPath);
+            string fileName = string.Format("{0}_{1}.log", "Log", DateTime.Now.ToString("yyyy-MM-dd HH-mm-ss", CultureInfo.InvariantCulture));
+            string logFilePath = string.Format(@"{0}\{1}", AppDomain.CurrentDomain.BaseDirectory + "Logs", fileName);
+            StringBuilder sb = new StringBuilder();
+            sb.AppendLine("----------------------------------------");
+            sb.AppendLine(DateTime.Now.ToString());
+            sb.AppendLine(message);
+            using (StreamWriter writer = new StreamWriter(logFilePath, true))
+            {
+                writer.Write(sb.ToString());
+                writer.Flush();
+            }
+        }
 
     }
 }

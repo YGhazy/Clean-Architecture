@@ -1,5 +1,6 @@
 ﻿using CleanArchitecture.Domain.Common;
 using CleanArchitecture.Infrastructure.Persistence.Data_context;
+using Microsoft.EntityFrameworkCore;
 
 namespace CleanArchitecture.Infrastructure.Persistence.Unit_of_work
 {
@@ -12,11 +13,27 @@ namespace CleanArchitecture.Infrastructure.Persistence.Unit_of_work
             _dbContext = dbContext;
         }
 
-        public void Commit()
+        public async Task<bool> SaveChangesAsync()
         {
-            _dbContext.SaveChanges();
-        }
+            try
+            {
+                return await _dbContext.SaveChangesAsync() > 0;
 
+            }
+            catch (DbUpdateConcurrencyException ex)
+            {
+                // log message and enteries
+            }
+            catch (DbUpdateException ex)
+            {
+                // log message and enteries
+            }
+            catch (Exception ex)
+            {
+                // Log here.
+            }
+            return false;
+        }
         public void Rollback()
         {
             throw new NotImplementedException();

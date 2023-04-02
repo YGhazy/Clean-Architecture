@@ -1,4 +1,5 @@
 using CleanArchitecture.Setup;
+using CleanArchitecture.WebAPI.IOC;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -9,6 +10,7 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.SetupServices(builder.Configuration);
+//var container = AutoFacConfig.BuildContainer();
 
 var app = builder.Build();
 

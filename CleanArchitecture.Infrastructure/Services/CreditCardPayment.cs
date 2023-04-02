@@ -1,4 +1,5 @@
-﻿using CleanArchitecture.Domain.Common;
+﻿using CleanArchitecture.Application.Common;
+using CleanArchitecture.Domain.Common;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
@@ -10,20 +11,21 @@ namespace CleanArchitecture.Infrastructure.Services
 {
     public class CreditCardPayment : IPayment
     {
-        private readonly ILogger<CreditCardPayment> _logger;
-
-        public CreditCardPayment(ILogger<CreditCardPayment> logger)
+        //private readonly ILogger<CreditCardPayment> _logger;
+        private readonly ILogging _logging;
+        public CreditCardPayment()
         {
-            _logger = logger;
+            _logging = FileLogging.Instance;
+
         }
 
-        //public bool ProcessPayment(decimal amount)
-        //{
-        //    // Logic to process credit card payment
-        //    _logger.LogInformation($"Processed credit card payment for amount {amount}");
+        public bool ProcessPayment(decimal amount)
+        {
+            // Logic to process credit card payment
+            _logging.LogInformation($"Processed credit card payment for amount {amount}");
 
-        //    return true;
-        //}
+            return true;
+        }
 
         public Task<bool> ProcessPaymentAsync(decimal amount)
         {

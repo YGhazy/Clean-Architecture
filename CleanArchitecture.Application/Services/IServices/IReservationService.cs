@@ -13,7 +13,9 @@ namespace CleanArchitecture.Application.Services.IServices
     public interface IReservationService
     {
         Task<ApiResponse<ReservationDTO>> CreateReservationAsync(CreateReservationRequest req);
-        Task<bool> UpdateReservationAsync(int reservationId, int numberOfSeats);
-        Task<bool> CancelReservationAsync(int reservationId);
+         Task<bool> UpdateReservationAsync(int reservationId, int numberOfSeats);
+        public Task<ApiResponse<bool>> CancelReservationByCinemaAsync(int reservationID);
+        public Task<ApiResponse<bool>> CancelReservationByCustomerAsync(int reservationID);
+        public Task<ApiResponse<bool>> ConfirmReservationAsync(int reservationID);
     }
 }

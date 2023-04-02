@@ -1,4 +1,5 @@
-﻿using CleanArchitecture.Domain.Common;
+﻿using CleanArchitecture.Application.Common;
+using CleanArchitecture.Domain.Common;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
@@ -10,17 +11,17 @@ namespace CleanArchitecture.Infrastructure.Services
 {
     public class BitcoinPayment : IPayment
     {
-        private readonly ILogger<BitcoinPayment> _logger;
+        private readonly ILogging _logging;
 
-        public BitcoinPayment(ILogger<BitcoinPayment> logger)
+        public BitcoinPayment()
         {
-            _logger = logger;
+            _logging = FileLogging.Instance;
         }
 
         public bool ProcessPayment(decimal amount)
         {
-            // Logic to process credit card payment
-            _logger.LogInformation($"Processed credit card payment for amount {amount}");
+            // Logic to process Bitcoin payment
+            _logging.LogInformation($"Processed Bitcoin payment for amount {amount}");
 
             return true;
         }

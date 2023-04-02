@@ -8,7 +8,7 @@ namespace CleanArchitecture.Domain.Common
 {
     public interface IUnitOfWork
     {
-        void Commit();
+        Task<bool> SaveChangesAsync();
         void Rollback();
     }
 

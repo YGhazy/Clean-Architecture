@@ -1,4 +1,5 @@
-﻿using CleanArchitecture.Domain.Common;
+﻿using CleanArchitecture.Application.Common;
+using CleanArchitecture.Domain.Common;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
@@ -10,17 +11,17 @@ namespace CleanArchitecture.Infrastructure.Services
 {
     public class PayPalPayment : IPayment
     {
-        private readonly ILogger<PayPalPayment> _logger;
+        private readonly ILogging _logging;
 
-        public PayPalPayment(ILogger<PayPalPayment> logger)
+        public PayPalPayment()
         {
-            _logger = logger;
+            _logging = FileLogging.Instance;
         }
 
         public bool ProcessPayment(decimal amount)
         {
-            // Logic to process credit card payment
-            _logger.LogInformation($"Processed credit card payment for amount {amount}");
+            // Logic to process PayPal payment
+            _logging.LogInformation($"Processed PayPal payment for amount {amount}");
 
             return true;
         }

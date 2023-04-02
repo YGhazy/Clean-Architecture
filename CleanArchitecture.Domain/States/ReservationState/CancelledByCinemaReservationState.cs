@@ -11,33 +11,35 @@ namespace CleanArchitecture.Domain.States.ReservationState
     {
         public void Confirm(Reservation reservation)
         {
-            // Cannot confirm a cancelled reservation
+            throw new InvalidOperationException("Cannot confirm a cancelled reservation");
+
         }
 
         public void CancelByCinema(Reservation reservation)
-        {
-            // Already cancelled
+         {
+            throw new InvalidOperationException("Already cancelled");
+
         }
 
         public void CancelByCustomer(Reservation reservation)
         {
-            // Cannot cancel a cancelled reservation
+            throw new InvalidOperationException("Cannot cancel a cancelled reservation");
         }
 
-        public void Expire(Reservation reservation)
-        {
-            // Cannot expire a cancelled reservation
-        }
+        //public void Expire(Reservation reservation)
+        //{
+        //    throw new InvalidOperationException("Cannot expire a cancelled reservation");
+        //}
 
-        public void NoShow(Reservation reservation)
-        {
-            // Cannot mark as no show a cancelled reservation
-        }
+        //public void NoShow(Reservation reservation)
+        //{
+        //    throw new InvalidOperationException("Cannot mark as no show a cancelled reservation");
+        //}
 
-        public void CheckIn(Reservation reservation)
-        {
-            // Cannot check in a cancelled reservation
-        }
+        //public void CheckIn(Reservation reservation)
+        //{
+        //    throw new InvalidOperationException("Cannot check in a cancelled reservation");
+        //}
     }
 
 }

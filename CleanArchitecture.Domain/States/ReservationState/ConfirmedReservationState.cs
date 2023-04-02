@@ -6,7 +6,7 @@ namespace CleanArchitecture.Domain.States.ReservationState
     {
         public void Confirm(Reservation reservation)
         {
-            // Already confirmed
+            throw new InvalidOperationException("Already confirmed");
         }
 
         public void CancelByCinema(Reservation reservation)

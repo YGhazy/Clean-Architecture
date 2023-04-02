@@ -36,7 +36,7 @@ namespace CleanArchitecture.Infrastructure.Persistence.Repositories
         public async Task AddAsync(TEntity entity)
         {
             await _dbContext.Set<TEntity>().AddAsync(entity);
-            await _dbContext.SaveChangesAsync();
+            //await _dbContext.SaveChangesAsync();
         }
 
         public async Task UpdateAsync(TEntity entity, params Expression<Func<TEntity, object>>[] propertiesToUpdate)
@@ -48,13 +48,13 @@ namespace CleanArchitecture.Infrastructure.Persistence.Repositories
                 _dbContext.Entry(entity).Property(property).IsModified = true;
             }
 
-            await _dbContext.SaveChangesAsync();
+       //     await _dbContext.SaveChangesAsync();
         }
 
         public async Task DeleteAsync(TEntity entity)
         {
             _dbContext.Set<TEntity>().Remove(entity);
-            await _dbContext.SaveChangesAsync();
+         //   await _dbContext.SaveChangesAsync();
         }
 
         public async Task<int> CountAsync()

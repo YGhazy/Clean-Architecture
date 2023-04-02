@@ -11,7 +11,7 @@ using Stack.API.Controllers.Common;
 namespace CleanArchitecture.WebAPI.Controllers
 {
     [ApiController]
-    [Route("[controller]")]
+    [Route("api/[controller]/[action]")]
     public class ReservationController : BaseResultHandlerController<IReservationService>
     {
         //private readonly ILogger<WeatherForecastController> _logger;
@@ -26,31 +26,36 @@ namespace CleanArchitecture.WebAPI.Controllers
             _reservationRepository = reservationRepository;
         }
 
-        //[HttpGet(Name = "GetWeatherForecast")]
-        //public IEnumerable<WeatherForecast> Get()
-        //{
-        //    _logging.LogException("error WeatherForecast");
-        //    return Enumerable.Range(1, 5).Select(index => new WeatherForecast
-        //    {
-        //        Date = DateTime.Now.AddDays(index),
-        //        TemperatureC = Random.Shared.Next(-20, 55),
-        //        Summary = Summaries[Random.Shared.Next(Summaries.Length)]
-        //    })
-        //    .ToArray();
-        //}
-
-
         [HttpPost]
         public async Task<IActionResult> CreateReservation(CreateReservationRequest request)
         {
-            //var payment = _paymentFactory.CreatePayment(request.PaymentMethod);
-            //if (payment == null)
-            //{
-            //    return BadRequest("Invalid payment type.");
-            //}
-            //var result = await _reservationRepository.GetReservedSeatsByScreenShowIdAsync(2);
-            //return Ok(result);
+
             return await AddItemResponseHandler(async () => await service.CreateReservationAsync(request));
+        }
+
+        [HttpPost]
+        [Route("{request}")]
+        public async Task<IActionResult> CancelReservationByCustomer(int request)
+        {
+
+            return await EditItemResponseHandler(async () => await service.CancelReservationByCustomerAsync(request));
+        }
+
+        [HttpPost]
+        [Route("{request}")]
+
+        public async Task<IActionResult> CancelReservationByCinema(int request)
+        {
+
+            return await EditItemResponseHandler(async () => await service.CancelReservationByCinemaAsync(request));
+        }
+        [HttpPost]
+        [Route("{request}")]
+
+        public async Task<IActionResult> ConfirmReservationAsync(int request)
+        {
+
+            return await EditItemResponseHandler(async () => await service.ConfirmReservationAsync(request));
         }
     }
 }
