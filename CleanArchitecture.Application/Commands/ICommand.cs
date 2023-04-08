@@ -13,4 +13,11 @@ namespace CleanArchitecture.Application.Commands
         Task Undo();
         bool CanExecute();
     }
+
+    //public interface IBaseCommand
+    //{
+    //    Task Execute();
+    //    Task Undo();
+    //    bool CanExecute();
+    //}
 }

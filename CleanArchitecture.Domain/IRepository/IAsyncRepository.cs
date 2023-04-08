@@ -9,13 +9,34 @@ namespace CleanArchitecture.Domain.IRepository
 {
     public interface IAsyncRepository<TEntity> where TEntity : class
     {
-        Task<TEntity> GetByIdAsync(int id);
-        Task<List<TEntity>> GetAll();
-        Task<List<TEntity>> GetWhere(Expression<Func<TEntity, bool>> expression);
-        Task AddAsync(TEntity entity);
-        Task UpdateAsync(TEntity entity, params Expression<Func<TEntity, object>>[] propertiesToUpdate);
-        Task DeleteAsync(TEntity entity);
-        Task<int> CountAsync();
+        Task<IQueryable<TEntity>> GetAsync(
+             Expression<Func<TEntity, bool>> filter = null,
+             int pageNumber = 0,
+             int itemsPerPage = 0,
+             Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>> orderBy = null,
+             string includeProperties = null);
+
+
+        Task<IQueryable<TEntity>> GetIgnoreQueryFilterAsync(
+        int pageNumber = 0,
+        int itemsPerPage = 0,
+        Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>> orderBy = null,
+        string includeProperties = null);
+
+
+        Task<TEntity> GetByIdAsync(params object[] id);
+
+        Task<TEntity> CreateAsync(TEntity entity);
+
+        Task CreateRangeAsync(params TEntity[] entities);
+
+        Task<bool> UpdateAsync(TEntity entity);
+
+        Task<bool> RemoveAsync(TEntity entity);
+
+        Task<List<Dictionary<string, object>>> ExecuteStoredProcedure(string storedProcedure, Dictionary<string, object> parameters = null);
+
+
 
     }
 }

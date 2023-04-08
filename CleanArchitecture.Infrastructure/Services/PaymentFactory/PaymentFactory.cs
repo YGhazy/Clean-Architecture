@@ -1,12 +1,13 @@
 ﻿using CleanArchitecture.Domain.Common;
 using CleanArchitecture.Domain.Enums;
+using CleanArchitecture.Infrastructure.Services.Payment;
 
-namespace CleanArchitecture.Infrastructure.Services
+namespace CleanArchitecture.Infrastructure.Services.PaymentFactory
 {
-    public class PaymentFactory: IPaymentFactory
+    public class PaymentFactory : IPaymentFactory
     {
         public PaymentFactory()
-        {}
+        { }
 
         public IPayment CreatePayment(PaymentMethod paymentMethod)
         {
@@ -20,6 +21,8 @@ namespace CleanArchitecture.Infrastructure.Services
                     return new PayPalPayment(); ;
                 case PaymentMethod.Bitcoin:
                     return new BitcoinPayment();
+                case PaymentMethod.ThirdPartyPayment:
+                    return new PaymentGatewayAdapter();
                 default:
                     throw new ArgumentException("Invalid payment method.");
             }

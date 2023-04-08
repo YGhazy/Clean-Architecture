@@ -25,12 +25,12 @@ namespace CleanArchitecture.Application.Interactors
 
         public async Task<IEnumerable<Movie>> GetAllMovies()
         {
-            return await _movieRepository.GetAll();
+            return await _movieRepository.GetAsync();
         }
 
         public void AddMovie(Movie movie)
         {
-            _movieRepository.AddAsync(movie);
+            _movieRepository.CreateAsync(movie);
         }
 
         public void UpdateMovie(Movie movie)
@@ -40,7 +40,7 @@ namespace CleanArchitecture.Application.Interactors
 
         public void DeleteMovie(Movie movie)
         {
-            _movieRepository.DeleteAsync(movie);
+            _movieRepository.RemoveAsync(movie);
         }
     }
 }

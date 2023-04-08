@@ -6,11 +6,15 @@ using System.Threading.Tasks;
 
 namespace CleanArchitecture.Domain.Enums
 {
-    public enum PaymentMethod
+    public enum MailMethod
     {
-        CreditCard,
-        PayPal,
-        Bitcoin,
-        ThirdPartyPayment
+        Cloud,
+        OnPremise,
+    } 
+    
+    public enum DecoratorMethod
+    {
+        MessageDatabase,
+        StatisticsDecorator,
     }
 }

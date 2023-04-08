@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace CleanArchitecture.Application.Commands.Reservations
 {
-    public class CreateReservationCommand // : ICommand
+    public class CreateReservationCommand  : ICommand
     {
         private readonly IReservationRepository _reservationRepository;
         private readonly IUnitOfWork _unitOfWork;
@@ -33,47 +33,29 @@ namespace CleanArchitecture.Application.Commands.Reservations
 
         public async Task Execute()
         {
-            await _reservationRepository.AddAsync(_reservation);
+            await _reservationRepository.CreateAsync(_reservation);
             await _unitOfWork.SaveChangesAsync();
         }
 
         public async Task Undo()
         {
-            await _reservationRepository.DeleteAsync(_reservation);
+            await _reservationRepository.RemoveAsync(_reservation);
             await _unitOfWork.SaveChangesAsync();
         }
     }
 
-    class Invoker
+    public class ReservationManager //invoker
     {
-        //private Command command;
-        //public Invoker(Command command)
-        //{
-        //    this.command = command;
-        //}
-        //public void executeCommand()
-        //{
-        //    this.command.execute();
-        //}
-        //public void unexecuteCommand()
-        //{
-        //    this.command.unexecute();
-        //}
-    }
-    public class ReservationManager
-    {
-        private ICommand _command;
         private readonly Stack<ICommand> _commands = new Stack<ICommand>();
-        public ReservationManager(ICommand command)
+        public ReservationManager()
         {
-            _command = command;
         }
-        public void Invoke()
+        public void Invoke(ICommand command)
         {
-            if (_command.CanExecute())
+            if (command.CanExecute())
             {
-                _command.Execute();
-                _commands.Push(_command);
+                command.Execute();
+                _commands.Push(command);
             }
         }
 
@@ -85,12 +67,13 @@ namespace CleanArchitecture.Application.Commands.Reservations
             }
         }
 
-        //public void UndoAll()
-        //{
-        //    while (_commands.Any())
-        //    {
-        //        _commands.Pop()?.Undo();
-        //    }
-        //}
+        public void UndoAll()
+        {
+            while (_commands.Any())
+            {
+                _commands.Pop()?.Undo();
+            }
+        }
     }
 }
+

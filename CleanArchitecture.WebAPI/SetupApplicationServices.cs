@@ -1,5 +1,4 @@
 ﻿using AutoMapper;
-using CleanArchitecture.Application.Commands.Reservations;
 using CleanArchitecture.Application.Commands;
 using CleanArchitecture.Application.Common;
 using CleanArchitecture.Application.Services;
@@ -11,15 +10,22 @@ using CleanArchitecture.Infrastructure.Mappers;
 using CleanArchitecture.Infrastructure.Persistence.Data_context;
 using CleanArchitecture.Infrastructure.Persistence.Repositories;
 using CleanArchitecture.Infrastructure.Persistence.Unit_of_work;
-using CleanArchitecture.Infrastructure.Services;
 using CleanArchitecture.WebAPI.Controllers;
 using Microsoft.EntityFrameworkCore;
+using CleanArchitecture.Application.Obeservers;
+using CleanArchitecture.Application.Handler.Shows;
+using CleanArchitecture.Application.Mappers;
+using CleanArchitecture.Infrastructure.Services.PaymentFactory;
+using CleanArchitecture.Infrastructure.Services.MailerService;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Win32;
+using CleanArchitecture.Application.Commands.Reservations;
 
 namespace CleanArchitecture.Setup
 {
     public static class SetupApplicationServices
     {
-        public  static void SetupServices(this IServiceCollection services, IConfiguration configuration)
+        public static void SetupServices(this IServiceCollection services, IConfiguration configuration)
         {
             #region Context
             services.AddDbContext<DatabaseContext>(options =>
@@ -47,8 +53,10 @@ namespace CleanArchitecture.Setup
 
             var mapperConfig = new MapperConfiguration(mc =>
             {
-                mc.AddProfile(new MappingProfile());
+                mc.AddProfile(new InfrastructureMappingProfile());
+                mc.AddProfile(new ApplicationMappingProfile());
             });
+
             IMapper mapper = mapperConfig.CreateMapper();
             services.AddSingleton(mapper);
 
@@ -65,9 +73,9 @@ namespace CleanArchitecture.Setup
             //.AddScoped<IPayment, BitcoinPayment>(s => s.GetService<BitcoinPayment>());
 
             #endregion
-           
+
             #region reservation
-            services.AddScoped< ReservationService>();
+            services.AddScoped<ReservationService>();
             //services.AddScoped<IReservationService>(provider => new ReservationProxyService(provider.GetService<ReservationService>()));
             services.AddScoped<IReservationService>(provider =>
     new ReservationProxyService(provider.GetService<ReservationService>(),
@@ -84,10 +92,34 @@ namespace CleanArchitecture.Setup
             //    return new ReservationProxyService( realService);
             //});
 
-            // services.AddScoped<ICommand, CreateReservationCommand>();
+            //services.AddScoped<ICommand, CreateReservationCommand>();
+
+            //services.AddScoped(typeof(ICommand<>),typeof(CreateReservationCommand<>));
 
             #endregion
 
+            //chain of responsibility for show
+            services.AddScoped<IHandler<Show>>(provider =>
+            {
+                var movieHandler = new MovieHandler();
+                var dateTimeHandler = new ShowDateTimeHandler();
+                //var screensHandler = new ShowScreensHandler();
+
+                movieHandler.SetSuccessor(dateTimeHandler);
+
+                return movieHandler;
+            });
+            services.AddScoped<IShowService, ShowService>();
+
+
+            // mail factory
+            services.AddScoped<IMailWrapDecoratorFactory, MailWrapDecoratorFactory>();
+            services.AddScoped<IMailServiceFactory, MailDecoratorFactory>();
+
+
+            services.AddScoped<ReservationManager>();
+
         }
+
     }
 }

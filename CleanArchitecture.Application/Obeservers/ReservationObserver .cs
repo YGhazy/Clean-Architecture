@@ -3,7 +3,7 @@ using CleanArchitecture.Domain.Entities;
 using CleanArchitecture.Domain.Enums;
 using CleanArchitecture.Domain.IRepository;
 
-namespace CleanArchitecture.Application.Commands.Reservations
+namespace CleanArchitecture.Application.Obeservers
 {
     public class ReservationObserver : ICustomObserver<Reservation>
     {

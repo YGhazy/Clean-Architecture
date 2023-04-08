@@ -10,9 +10,11 @@ using System.Threading.Tasks;
 
 namespace CleanArchitecture.Application.Common
 {
-    public sealed class FileLogging : ILogging // prevent inheritance
+    public class FileLogging : ILogging // prevent inheritance
     {
         // Lazy<T> This delays the cost of creating it till if/when it's needed instead of always incurring the cost.
+        //add lock
+        //or use static constructor
         private static readonly Lazy<FileLogging> _lazyLogger
             = new Lazy<FileLogging>(() => new FileLogging());
 
@@ -25,7 +27,7 @@ namespace CleanArchitecture.Application.Common
             }
         }
 
-        protected FileLogging()
+        private FileLogging()
         {
         }
 
@@ -35,10 +37,11 @@ namespace CleanArchitecture.Application.Common
 
         public void LogException(string message)
         {
-            string folderPath = string.Format( AppDomain.CurrentDomain.BaseDirectory + "Exceptions");
+            string folderPath = Path.Combine(Environment.CurrentDirectory, "Logs");
             DirectoryInfo di = Directory.CreateDirectory(folderPath);
-            string fileName = string.Format("{0}_{1}.log", "Exception", DateTime.Now.ToString("yyyy-MM-dd HH-mm-ss", CultureInfo.InvariantCulture));
-            string logFilePath = string.Format(@"{0}\{1}", AppDomain.CurrentDomain.BaseDirectory + "Exceptions", fileName);
+            string fileName = string.Format("{0}_{1}.log", "Exception", DateTime.Now.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture));
+            string logFilePath = Path.Combine(folderPath, fileName);
+
             StringBuilder sb = new StringBuilder();
             sb.AppendLine("----------------------------------------");
             sb.AppendLine(DateTime.Now.ToString());
@@ -50,10 +53,10 @@ namespace CleanArchitecture.Application.Common
             }        }
         public void LogInformation(string message)
         {
-            string folderPath = string.Format(AppDomain.CurrentDomain.BaseDirectory + "Logs");
+            string folderPath = Path.Combine(Environment.CurrentDirectory, "Logs");
             DirectoryInfo di = Directory.CreateDirectory(folderPath);
-            string fileName = string.Format("{0}_{1}.log", "Log", DateTime.Now.ToString("yyyy-MM-dd HH-mm-ss", CultureInfo.InvariantCulture));
-            string logFilePath = string.Format(@"{0}\{1}", AppDomain.CurrentDomain.BaseDirectory + "Logs", fileName);
+            string fileName = string.Format("{0}_{1}.log", "Log", DateTime.Now.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture));
+            string logFilePath = Path.Combine(folderPath, fileName);
             StringBuilder sb = new StringBuilder();
             sb.AppendLine("----------------------------------------");
             sb.AppendLine(DateTime.Now.ToString());

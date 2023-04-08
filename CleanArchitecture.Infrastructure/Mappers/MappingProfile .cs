@@ -5,18 +5,17 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using AutoMapper;
+using CleanArchitecture.Application.DTOs;
+using CleanArchitecture.Application.Models;
 using CleanArchitecture.Domain.Entities;
 
 namespace CleanArchitecture.Infrastructure.Mappers
 {
-    public class MappingProfile: Profile
+    public class InfrastructureMappingProfile : Profile
     {
-        public MappingProfile()
+        public InfrastructureMappingProfile()
         {
-            //CreateMap<Movie, MovieDto>();
-            //CreateMap<Cast, CastDto>();
-            //CreateMap<Director, DirectorDto>();
-            //CreateMap<Genre, GenreDto>();
+
         }
     }
 }
